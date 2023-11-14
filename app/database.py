@@ -5,7 +5,8 @@ from .config import settings as s
 # import mysql.connector
 # import time
 
-SQLALCHEMY_DATABASE_URL = f"mysql://{s.db_username}:{s.db_password}@{s.db_host}/{s.db_dbname}"
+# SQLALCHEMY_DATABASE_URL = f"mysql://{s.db_username}:{s.db_password}@{s.db_host}/{s.db_dbname}"
+SQLALCHEMY_DATABASE_URL = f"postgresql+psycopg2://{s.db_username}:{s.db_password}@{s.db_host}/{s.db_dbname}"
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 
@@ -20,21 +21,4 @@ def get_db():
     finally:
         db.close()
 
-# def test_connect_db():
-#     while True:
-#         try:
-#             config = {
-#                 'user': 'fastapi',
-#                 'password': 'Polyglot98$$',
-#                 'host': '127.0.0.1',
-#                 'database': 'fastapi',
-#                 'raise_on_warnings': True
-#             }
-#             conn = mysql.connector.connect(**config)
-#             cursor = conn.cursor()
-#             print("Database connection was successful")
-#             break
-#         except Exception as error:
-#             print("Connection to database failed")
-#             print("Error: ", error)
-#             time.sleep(2)        
+   
