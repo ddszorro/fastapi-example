@@ -1,5 +1,5 @@
 import jwt
-# from jose import JWTError
+from jose import JWTError
 from datetime import datetime, timedelta
 from . import schemas, database, models
 from fastapi import Depends, status, HTTPException
@@ -23,7 +23,7 @@ def create_access_token(data: dict):
         
         encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     except:
-        raise jwt.exceptions.InvalidAlgorithmError
+        raise JWTError
 
     return encoded_jwt
 
