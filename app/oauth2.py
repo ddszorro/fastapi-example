@@ -1,4 +1,5 @@
-from jose import JWTError, jwt
+import jwt
+# from jose import JWTError
 from datetime import datetime, timedelta
 from . import schemas, database, models
 from fastapi import Depends, status, HTTPException
@@ -14,12 +15,15 @@ ACCESS_TOKEN_EXPIRE_MINUTES = settings.access_token_expire_mins
 
 
 def create_access_token(data: dict):
-    to_encode = data.copy()
-    
-    expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    to_encode.update({"exp": expire})
-    
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    try:
+        to_encode = data.copy()
+        
+        expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+        to_encode.update({"exp": expire})
+        
+        encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    except:
+        raise jwt.exceptions.InvalidAlgorithmError
 
     return encoded_jwt
 
@@ -31,7 +35,7 @@ def verify_access_token(token: str, credentials_exception):
         if id is None:
             raise credentials_exception
         token_data = schemas.TokenData(id=id)
-    except JWTError:
+    except jwt.exceptions.InvalidTokenError:
         raise credentials_exception       
     
     return token_data
